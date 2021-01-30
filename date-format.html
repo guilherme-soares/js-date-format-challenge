@@ -26,6 +26,46 @@
         document.body.appendChild(el)
       })
     })();
+
+    (() => {
+        // Storing the dates 
+        let elements = document.getElementsByClassName("js-date-format")
+        let dates = []
+        for (let i = 0; i < elements.length; i++) {
+            dates[i] = new Date(elements[i].innerHTML)
+        }
+
+        setInterval(() => {
+            for (let i = 0; i < dates.length; i++) {
+                // Date difference in seconds
+                let timeDiff = ((Date.now() - dates[i].getTime()) / 1000)
+
+                // For seconds
+                if (timeDiff < 60) {
+                    timeDiff = Math.floor(timeDiff)
+                    var formattedTime = timeDiff == 1 ? `${timeDiff} second ago` : `${timeDiff} seconds ago`
+                } else {
+                    // For minutes
+                    if (timeDiff < 3600) {
+                        timeDiff = Math.floor(timeDiff / 60)
+                        var formattedTime = timeDiff == 1 ? `${timeDiff} minute ago` : `${timeDiff} minutes ago`
+                    } else {
+                        // For hours
+                        if (timeDiff < 86400) {
+                            timeDiff = Math.floor(timeDiff / 3600)
+                            var formattedTime = timeDiff == 1 ? `${timeDiff} hour ago` : `${timeDiff} hours ago`
+                        } else {
+                            // For more than 23 hours
+                            var formattedTime = dates[i].toISOString()
+                        }
+                    }
+                }
+
+                // Setting content
+                elements[i].innerHTML = 'Started ' + formattedTime
+            }
+        }, 1000)
+    })();
   </script>
 </body>
 </html>
